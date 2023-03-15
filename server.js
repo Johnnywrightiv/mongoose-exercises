@@ -144,20 +144,57 @@ and your server is running do the following:
 /*Books
 ----------------------*/
 //1. Find books with fewer than 500 but more than 200 pages
+Book.find(({pages:{"$lt":500, "$gt":200}}), (err, books) => {
+  console.log(books);
+});
 
 //2. Find books whose rating is less than 5, and sort by the author's name
+Book.find(({rating:{"$lt":5}}).sort({author:-1}).exec((err, books) =>
+  console.log(books)
+));
 
 //3. Find all the Fiction books, skip the first 2, and display only 3 of them
+Book.find({genre:"Fiction"}).skip(2).limit(3).exec((err, books) => {
+  console.log(books);
+});
 
 
 /*People
 ----------------------*/
 //1. Find all the people who are tall (>180) AND rich (>30000)
+People.find({height:{"$gt":180}, salary:{"$gt": 30000}}, (err, people) => {
+  console.log(people);
+})
 
 //2. Find all the people who are tall (>180) OR rich (>30000)
+People.find({ $or: [ { height: { $gt: 180 } }, { salary: { $gt: 30000 } } ] }, (err, people) => {
+  console.log(people);
+})
 
 //3. Find all the people who have grey hair or eyes, and who's weight (<70)
+People.find({ $or: [{ hair: "grey" }, { eyes: "grey" }], weight: { $lt: 70 } }, (err, people) => {
+  console.log(people);
+});
 
 //4. Find people who have at least 1 kid with grey hair
+Person.find({ 
+  kids: { 
+    $elemMatch: { 
+      hair: 'grey'
+    } 
+  }
+}, (err, people) => {
+  console.log(people);
+});
 
 //5. Find all the people who have at least one kid who's weight is >100 and themselves' weight is >100
+Person.find(
+  {weight:{"$gt":100},
+  kids: { 
+    $elemMatch: { 
+      weight: {"$gt":100}
+    } 
+  }}
+  ), (err, people) => {
+    console.log(people);
+  }

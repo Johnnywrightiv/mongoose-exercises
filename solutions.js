@@ -24,7 +24,7 @@
 //======================================================
 //======================================================
 Book.find(({pages:{"$lt":500, "$gt":200}}), (err, books) => {
-
+  console.log(books);
 });
 
 //Find books whose rating is less than 5, and sort by the author's name
